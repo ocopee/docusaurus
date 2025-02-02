@@ -19,7 +19,18 @@ jobs:
           echo "$T150_RSA" > t150_rsa.cert
           chmod 600 t150_rsa.cert
 
-      - name: Setup Python
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Packages
+        run: npm ci 
+
+      - name: Build
+        run: npm build
+
+      - name: Setup Python, Ansible
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
