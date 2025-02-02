@@ -6,6 +6,12 @@
     user: "root"
 
   tasks:
+    - name: Add user to group root
+      user:
+        name: "{{ user }}"
+        groups: root
+        state: present
+
     - name: Archive source
       archive:
         path: ./build/
@@ -21,13 +27,6 @@
       ansible.builtin.unarchive:
         src: ./docusaurus.tar.gz
         dest: /var/www/ocopee/docusaurus
-
-    - name: Add user to group root
-      user:
-        name: "{{ user }}"
-        groups: root
-        state: present
-
 
     - name: Restart nginx to reload
       service: name=nginx state=restarted
