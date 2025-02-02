@@ -1,0 +1,32 @@
+name: Ansible
+on: [push]
+
+env:
+  ANSIBLE_HOST_KEY_CHECKING: "False"
+
+jobs:
+  Ansible:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout respository
+        uses: actions/checkout@v4
+
+      - name: Prepare environment files.
+        env:
+          T150_RSA: ${{ secrets.T150_RSA }}
+        run: |
+          # create t150_rsa.cert, password.txt
+          echo "$T150_RSA" > t150_rsa.cert
+          chmod 600 t150_rsa.cert
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Ansible
+        run: pip install ansible
+
+      - name: Deploy to Nginx
+        run: ansible-playbook -i inventory.yaml playbooks.yml
+

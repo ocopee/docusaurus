@@ -1,0 +1,33 @@
+---
+- name: Install and configure Nginx
+  hosts: pve_master
+  become: yes
+  vars:
+    user: "root"
+
+  tasks:
+    - name: Archive source
+      archive:
+        path: ./build/
+        dest: ./docusaurus.tar.gz
+      delegate_to: localhost
+
+    - name: Create target directory
+      file:
+        path: /var/www/ocopee/docusaurus
+        state: directory
+
+    - name: Extract to source
+      ansible.builtin.unarchive:
+        src: ./docusaurus.tar.gz
+        dest: /var/www/ocopee/docusaurus
+
+    - name: Add user to group root
+      user:
+        name: "{{ user }}"
+        groups: root
+        state: present
+
+
+    - name: Restart nginx to reload
+      service: name=nginx state=restarted
