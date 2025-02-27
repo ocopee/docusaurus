@@ -13,11 +13,11 @@ jobs:
 
       - name: Prepare environment files.
         env:
-          T150_RSA: ${{ secrets.T150_RSA }}
+          OCOP_RSA: ${{ secrets.OCOP_RSA }}
         run: |
-          # create t150_rsa.cert, password.txt
-          echo "$T150_RSA" > t150_rsa.cert
-          chmod 600 t150_rsa.cert
+          # create credentials
+          echo "$OCOP_RSA" > ocop_rsa.cert
+          chmod 600 ocop_rsa.cert
 
       - name: Setup NodeJS
         uses: actions/setup-node@v4
