@@ -5,7 +5,30 @@ env:
   ANSIBLE_HOST_KEY_CHECKING: "False"
 
 jobs:
-  Ansible:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout respository
+        uses: actions/checkout@v4
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Packages
+        run: npm ci 
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: build/
+
+  Deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout respository
@@ -19,17 +42,6 @@ jobs:
           echo "$OCOP_RSA" > ocop_rsa.cert
           chmod 600 ocop_rsa.cert
 
-      - name: Setup NodeJS
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Install Packages
-        run: npm ci 
-
-      - name: Build
-        run: npm run build
-
       - name: Setup Python, Ansible
         uses: actions/setup-python@v5
         with:
@@ -37,6 +49,11 @@ jobs:
 
       - name: Install Ansible
         run: pip install ansible
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build
 
       - name: Deploy to Nginx
         run: ansible-playbook -i inventory.yaml playbooks.yml
