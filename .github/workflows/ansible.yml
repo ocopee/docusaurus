@@ -55,6 +55,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build
+          path: build/
+
+      - name: Listing files 
+        run: ls build/
 
       - name: Deploy to Nginx
         run: ansible-playbook -i inventory.yaml playbooks.yml
