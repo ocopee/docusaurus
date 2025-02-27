@@ -4,6 +4,6 @@ pve_master:
       ansible_host: 14.241.129.58
       ansible_user: root
       ansible_ssh_private_key_file: t150_rsa.cert
-      ansible_port: 5022
+      ansible_port: 2010
       ansible_host_key_checking: false
 
