@@ -1,9 +1,9 @@
 ---
 - name: Install and configure Nginx
-  hosts: pve_master
+  hosts: vm_nginx
   become: yes
   vars:
-    user: "root"
+    user: "ocop"
 
   tasks:
     - name: Add user to group root
